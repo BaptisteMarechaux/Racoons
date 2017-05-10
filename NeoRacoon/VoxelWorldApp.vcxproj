@@ -19,10 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{441F644F-1AB0-4E36-89E8-9501C9E50D98}</ProjectGuid>
+    <ProjectGuid>{DF5F4CAA-F5BF-4FB8-B515-689B3D61BF07}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Racoons</RootNamespace>
+    <RootNamespace>VoxelWorldApp</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>NeoRacoon</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -88,10 +89,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\libs\glm\glm;..\common;..\libs\glfw\include\GLFW;..\libs\gl3w;..\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\libs\glfw\lib-vc2010-32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,12 +120,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\libs\glm\glm;..\common;..\libs\glfw\include\GLFW;..\libs\gl3w;..\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\libs\glfw\lib-vc2010-32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,22 +152,46 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BenTest.h" />
-    <ClInclude Include="CatMull.h" />
-    <ClInclude Include="Curve.h" />
-    <ClInclude Include="FDMathCore.h" />
-    <ClInclude Include="MeshUtils.h" />
-    <ClInclude Include="Point.h" />
+    <ClInclude Include="..\common\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="..\common\ShaderManager.h" />
+    <ClInclude Include="..\libs\gl3w\GL\gl3w.h" />
+    <ClInclude Include="..\libs\gl3w\GL\glcorearb.h" />
+    <ClInclude Include="..\libs\glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="..\libs\glfw\include\GLFW\glfw3native.h" />
+    <ClInclude Include="..\libs\imgui\imconfig.h" />
+    <ClInclude Include="..\libs\imgui\imgui.h" />
+    <ClInclude Include="..\libs\imgui\imgui_internal.h" />
+    <ClInclude Include="..\libs\imgui\stb_rect_pack.h" />
+    <ClInclude Include="..\libs\imgui\stb_textedit.h" />
+    <ClInclude Include="..\libs\imgui\stb_truetype.h" />
+    <ClInclude Include="Chunk.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Voxel.h" />
+    <ClInclude Include="VTransform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BenTest.cpp" />
-    <ClCompile Include="CatMull.cpp" />
-    <ClCompile Include="MeshUtils.cpp" />
-    <ClCompile Include="Racoons.cpp" />
+    <ClCompile Include="..\common\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="..\common\ShaderManager.cpp" />
+    <ClCompile Include="..\libs\gl3w\GL\gl3w.c" />
+    <ClCompile Include="..\libs\imgui\imgui.cpp" />
+    <ClCompile Include="..\libs\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\libs\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Voxel.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="VTransform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\simple.fs" />
+    <None Include="..\shaders\simple.vs" />
+    <None Include="..\shaders\ssao.fs" />
+    <None Include="..\shaders\ssao.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
