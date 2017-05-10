@@ -3,8 +3,10 @@
 
 #include "stdafx.h"
 
+#include "BenTest.h"
+
 int main()
 {
-    return 0;
+    return testCurves();
 }
 
