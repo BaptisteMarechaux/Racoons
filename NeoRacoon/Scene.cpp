@@ -1,4 +1,4 @@
-#include "Scene.h"
+ #include "Scene.h"
 
 #define POSITION_TEXTURE_UNIT           GL_TEXTURE1
 #define POSITION_TEXTURE_UNIT_INDEX     1
@@ -77,6 +77,17 @@ void Scene::Initialize()
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, occlusioncolorbuffer);
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBindVertexArray(0);
+
+	glGenVertexArrays(1, &pointsVertexArrayID);
+		glBindVertexArray(pointsVertexArrayID);
+		glGenBuffers(1, &singlePointsVertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, singlePointsVertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * pointVertices.size(), pointVertices.data(), GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
 	glBindVertexArray(0);
 
 	lastTime = glfwGetTime();
@@ -281,6 +292,29 @@ void Scene::AutoRotateCamera(float speed, float distance)
 	mvp = proj * view * model;
 }
 
+void Scene::AddLine()
+{
+}
+
+void Scene::AddPoints()
+{
+	/*
+	std::vector<glm::vec3> points = voxel->getPoints();
+	vertices.insert(vertices.end(), points.begin(), points.end());
+
+	//std::vector<GLuint> voxelIndices = voxel->getIndices(indices.size());
+	//indices.insert(indices.end(), voxelIndices.begin(), voxelIndices.end());
+
+	std::vector<glm::vec3> voxelNormals = voxel->getNormals();
+	normals.insert(normals.end(), voxelNormals.begin(), voxelNormals.end());
+
+	UpdateBuffers();
+
+	std::cout << "Scene Added at Position : " << pos.x << " " << pos.y << " " << pos.z << std::endl;
+	std::cout << "Vertex Buffer Size : " << vertices.size() << std::endl;
+	*/
+}
+
 void Scene::GeometryPass()
 {
 	glUseProgram(program);
@@ -295,6 +329,11 @@ void Scene::GeometryPass()
 	glPointSize(5);
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 	//glDrawElements(GL_POINTS, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glBindVertexArray(pointsVertexArrayID);
+	glPointSize(5);
+	glDrawArrays(GL_TRIANGLES, 0, pointVertices.size());
 	glBindVertexArray(0);
 }
 

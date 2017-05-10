@@ -31,10 +31,15 @@ private:
 	//Buffers
 	GLuint vertexBufferPoints;
 	GLuint uvbuffer, normalbuffer, occlusioncolorbuffer;
+	//Other Buffers
+	GLuint singlePointsVertexBuffer;
+	GLuint lineVertexBuffer;
 
 	std::vector<glm::vec3> normals, positions, vertices;
 	std::vector<float> occlusionColors;
 	std::vector<GLuint> indices;
+	//Other Arrays
+	std::vector<glm::vec3> pointVertices, lineVertices;
 
 	//Shader References
 	GLuint program, ssaoProgram;
@@ -46,6 +51,9 @@ private:
 
 	//VAO
 	GLuint voxelVertexArrayID;
+
+	GLuint pointsVertexArrayID;
+	GLuint linesVertexArrayID;
 
 
 	float lastTime;
@@ -96,6 +104,10 @@ public:
 	void zoomFoV(float);
 
 	void AutoRotateCamera(float speed, float distance=500);
+
+	void AddLine();
+
+	void AddPoints();
 
 	//Render Passes
 	void GeometryPass();
