@@ -3,15 +3,12 @@ namespace SimpleCornerCutting
 {
 	Edge3D * eCutting ( Edge3D * e , float uRatio , float vRatio )
 	{
-		// gestion exception u et v si inférieur à 0 ou u + v supérieur à 1
 		if ( uRatio < 0 )
-			return nullptr;
+			throw std::invalid_argument ( "uRatio is negative." );
 		if ( vRatio < 0 )
-			return nullptr;
+			throw std::invalid_argument ( "vRatio is negative." );
 		if ( uRatio + vRatio > 1 )
-			return nullptr;
-		// tada dégueulasse
-
+			throw std::invalid_argument ( "uRatio + vRatio is higher than 1." );
 
 		glm::vec3 vecAB = e->get_B ( ) - e->get_A ( );
 		glm::vec3 Abis = vecAB * uRatio + e->get_A ( );
@@ -23,11 +20,11 @@ namespace SimpleCornerCutting
 	Surface3D * sCutting ( Surface3D * s , int steps , float uRatio , float vRatio )
 	{
 		if ( uRatio < 0 )
-			return nullptr;
+			throw std::invalid_argument ( "uRatio is negative." );
 		if ( vRatio < 0 )
-			return nullptr;
+			throw std::invalid_argument ( "vRatio is negative." );
 		if ( uRatio + vRatio > 1 )
-			return nullptr;
+			throw std::invalid_argument ( "uRatio + vRatio is higher than 1." );
 
 		std::vector<Edge3D*> edges = s->get_Edges ( );
 		std::vector<Edge3D*> intermediaireEdges;
