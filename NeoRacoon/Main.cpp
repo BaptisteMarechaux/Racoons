@@ -118,25 +118,31 @@ int main ( int , char** )
 	Initialize ( );
 
 	//Points
-	glm::vec3 A = glm::vec3 ( -3 , -3 , 0 );
-	glm::vec3 B = glm::vec3 ( 3 , -3 , 0 );
-	glm::vec3 C = glm::vec3 ( 3 , 3 , 0 );
-	glm::vec3 D = glm::vec3 ( -3 , 3 , 0 );
+	glm::vec3 A = glm::vec3 ( -5 , -5 , 0 );
+	glm::vec3 B = glm::vec3 ( 5 , -5 , 0 );
+	glm::vec3 C = glm::vec3 ( 5 , 5 , 0 );
+	glm::vec3 D = glm::vec3 ( -5 , 5 , 0 );
+	glm::vec3 E = glm::vec3 ( -3 , 2 , 0 );
+	glm::vec3 F = glm::vec3 ( -8 , 5, 0 );
 	//Edges
 	Edge3D * AB = new Edge3D ( A , B );
 	Edge3D * BC = new Edge3D ( B , C );
 	Edge3D * CD = new Edge3D ( C , D );
-	Edge3D * DA = new Edge3D ( D , A );
+	Edge3D * DE = new Edge3D ( D , E );
+	Edge3D * EF = new Edge3D ( E , F );
+	Edge3D * FA = new Edge3D ( F , A );
 	std::vector<Edge3D*> edges;
 	edges.push_back ( AB );
 	edges.push_back ( BC );
 	edges.push_back ( CD );
-	edges.push_back ( DA );
+	edges.push_back ( DE );
+	edges.push_back ( EF );
+	edges.push_back ( FA );
 
 	//Surface
 	Surface3D * s = new Surface3D ( edges , true );
 
-	Surface3D * res = SimpleCornerCutting::sCutting ( s , 5 );
+	Surface3D * res = SimpleCornerCutting::sCutting ( s , 10 );
 
 
 	int i = 0;
