@@ -1,5 +1,8 @@
 #include "Scene.h"
 
+#include "MeshUtils.h"
+#include "CatMull.h"
+
 #define POSITION_TEXTURE_UNIT           GL_TEXTURE1
 #define POSITION_TEXTURE_UNIT_INDEX     1
 

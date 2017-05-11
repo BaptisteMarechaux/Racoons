@@ -2,10 +2,7 @@
 
 
 #include <vector>
-#include <deque>
 #include <initializer_list>
-#include <algorithm>
-
 
 
 struct Vertex
@@ -42,9 +39,6 @@ struct Edge
 	}
 
 	bool operator!=(const Edge &e) const { return !(this->operator==(e)); }
-
-
-	void swap() { std::swap(vertices[0], vertices[1]); }
 };
 
 
@@ -91,8 +85,6 @@ struct Mesh
 
 	Mesh() {}
 
-	std::vector<int> getConnectedVertices(int vert_id) const;
-
 	std::vector<int> getConnectedEdges(int vert_id) const;
 
 	std::vector<int> getConnectedFaces(int vert_id) const;
@@ -101,13 +93,19 @@ struct Mesh
 
 	int getEdgeId(const Edge &e);
 
-	std::vector<uint16_t> faceToIndices(int face_id) const { return faceToIndices(face_id, getBaryCenter()); }
+	RenderableMesh getRenderableMesh()
+	{
+		RenderableMesh ret;
+		ret.vertices.reserve(vertices.size() * 3);
+		for (auto it = vertices.begin(); it != vertices.end(); ++it)
+		{
+			ret.vertices.emplace_back(it->x, it->y, it->z);
+		}
 
-	std::vector<uint16_t> faceToIndices(int face_id, const Vertex &barycenter) const;
-
-	RenderableMesh getRenderableMesh() const;
-
-
-	Vertex getBaryCenter() const;
+		for (auto it = edges.begin(); it != edges.end(); ++it)
+		{
+			ret.indices.insert(ret.indices.end(), { static_cast<uint16_t>(it->vertices[0]), static_cast<uint16_t>(it->vertices[1]) });
+		}
+	}
 };
 
