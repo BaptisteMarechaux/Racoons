@@ -37,7 +37,7 @@ void Scene::Initialize()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	program = LoadShaders("..\\shaders\\simple.vs", "..\\shaders\\simple.fs");
+	program = LoadShaders("..\\shaders\\basic.vs", "..\\shaders\\basic.fs");
 	mvp_location = glGetUniformLocation(program, "MVP");
 	ModelMatrixID = glGetUniformLocation(program, "M");
 	ViewMatrixID = glGetUniformLocation(program, "V");
@@ -46,14 +46,6 @@ void Scene::Initialize()
 	LightID = glGetUniformLocation(program, "lightPos");
 	deltaTimeID = glGetUniformLocation(program, "deltaTime");
 	//AddVoxelAtPosition(glm::vec3(0, 0, 0)); //Utiliser cette ligne pour instancier un voxel. il fera appel à la fonction Update pour mettre a jour les buffers de la scene la scene
-
-	ssaoProgram = LoadShaders("..\\shaders\\ssao.vs", "..\\shaders\\ssao.fs");
-	ssao_posTextureUnitLocation = glGetUniformLocation(ssaoProgram, "gPositionMap");
-	ssao_sampleRadLocation = glGetUniformLocation(ssaoProgram, "gSampleRad");
-	ssao_projMatrixLocation = glGetUniformLocation(ssaoProgram, "gProj");
-	ssao_kernelLocation = glGetUniformLocation(ssaoProgram, "gKernel");
-
-	GenerateSampleKernel();
 
 	glGenVertexArrays(1, &voxelVertexArrayID);
 	glBindVertexArray(voxelVertexArrayID);
@@ -102,10 +94,6 @@ void Scene::Render()
 	deltaTime = float(currentTime - lastTime);
 
 	GeometryPass();
-
-	//SSAOPass();
-
-	BlurPass();
 
 	//lightPos[0] = cosf(0.5f * 0.2f * deltaTime);
 	//lightPos[1] = sinf(0.5f * 0.2f * deltaTime);
@@ -298,21 +286,7 @@ void Scene::AddLine()
 
 void Scene::AddPoints()
 {
-	/*
-	std::vector<glm::vec3> points = voxel->getPoints();
-	vertices.insert(vertices.end(), points.begin(), points.end());
 
-	//std::vector<GLuint> voxelIndices = voxel->getIndices(indices.size());
-	//indices.insert(indices.end(), voxelIndices.begin(), voxelIndices.end());
-
-	std::vector<glm::vec3> voxelNormals = voxel->getNormals();
-	normals.insert(normals.end(), voxelNormals.begin(), voxelNormals.end());
-
-	UpdateBuffers();
-
-	std::cout << "Scene Added at Position : " << pos.x << " " << pos.y << " " << pos.z << std::endl;
-	std::cout << "Vertex Buffer Size : " << vertices.size() << std::endl;
-	*/
 }
 
 void Scene::GeometryPass()
@@ -327,48 +301,10 @@ void Scene::GeometryPass()
 
 	glBindVertexArray(voxelVertexArrayID);
 	glPointSize(5);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	glDrawArrays(GL_POINTS, 0, vertices.size());
+	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 	//glDrawElements(GL_POINTS, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-
-	glBindVertexArray(pointsVertexArrayID);
-	glPointSize(5);
-	glDrawArrays(GL_TRIANGLES, 0, pointVertices.size());
-	glBindVertexArray(0);
-}
-
-void Scene::SSAOPass()
-{
-	glUseProgram(ssaoProgram);
-	glUniform1i(ssao_posTextureUnitLocation, POSITION_TEXTURE_UNIT_INDEX);
-
-	glBindVertexArray(voxelVertexArrayID);
-	glPointSize(5);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-	//glDrawElements(GL_POINTS, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-}
-
-void Scene::BlurPass()
-{
-}
-
-void Scene::GenerateSampleKernel()
-{
-	kernel = std::vector<glm::vec3>(kernelSize);
-	for (int i = 0; i < kernelSize; i++) {
-		kernel[i] = glm::vec3(RandomFloat(-1.0f, 1.0f), RandomFloat(-1.0f, 1.0f), RandomFloat(0.0f, 1.0f));
-		glm::normalize(kernel[i]);
-	}
-}
-
-void Scene::UpdateNeighbours()
-{
-	for (int i = 0; i < positions.size(); i++)
-	{
-
-	}
 }
 
 float Scene::RandomFloat(float a, float b)
@@ -402,10 +338,12 @@ void Scene::AddPointVertices(Surface3D surf)
 {
 	for (int i = 0;i < surf.get_Edges().size();++i)
 	{
-		pointVertices.push_back(surf.get_Edges()[i]->get_A());
+		vertices.push_back(surf.get_Edges()[i]->get_A());
 	}
 	if (!surf.get_Close())
 	{
-		pointVertices.push_back(surf.get_Edges()[surf.get_Edges().size() - 1]->get_B());
+		vertices.push_back(surf.get_Edges()[surf.get_Edges().size() - 1]->get_B());
 	}
+
+	UpdateBuffers();
 }

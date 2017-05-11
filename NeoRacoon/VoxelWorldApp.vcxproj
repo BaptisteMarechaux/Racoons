@@ -167,6 +167,7 @@
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="Edge3D.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SimpleCornerCutting.h" />
     <ClInclude Include="stdafx.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="Edge3D.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SimpleCornerCutting.cpp" />
     <ClCompile Include="stdafx.cpp" />
