@@ -1,4 +1,4 @@
- #include "Scene.h"
+#include "Scene.h"
 
 #define POSITION_TEXTURE_UNIT           GL_TEXTURE1
 #define POSITION_TEXTURE_UNIT_INDEX     1
@@ -57,36 +57,36 @@ void Scene::Initialize()
 
 	glGenVertexArrays(1, &voxelVertexArrayID);
 	glBindVertexArray(voxelVertexArrayID);
-		glGenBuffers(1, &vertexBufferPoints);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glGenBuffers(1, &vertexBufferPoints);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		glGenBuffers(1, &normalbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normals.size(), normals.data(), GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glGenBuffers(1, &normalbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normals.size(), normals.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		glGenBuffers(1, &occlusioncolorbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, occlusioncolorbuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * occlusionColors.size(), occlusionColors.data(), GL_STATIC_DRAW);
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, occlusioncolorbuffer);
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glGenBuffers(1, &occlusioncolorbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, occlusioncolorbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * occlusionColors.size(), occlusionColors.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, occlusioncolorbuffer);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glBindVertexArray(0);
 
 	glGenVertexArrays(1, &pointsVertexArrayID);
-		glBindVertexArray(pointsVertexArrayID);
-		glGenBuffers(1, &singlePointsVertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, singlePointsVertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * pointVertices.size(), pointVertices.data(), GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBindVertexArray(pointsVertexArrayID);
+	glGenBuffers(1, &singlePointsVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, singlePointsVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * pointVertices.size(), pointVertices.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindVertexArray(0);
 
@@ -125,7 +125,7 @@ void Scene::UpdateBuffers()
 
 	glBindBuffer(GL_ARRAY_BUFFER, occlusioncolorbuffer);
 	glBufferData(GL_ARRAY_BUFFER, occlusionColors.size() * sizeof(float), occlusionColors.data(), GL_STATIC_DRAW);
-	
+
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, voxelElementBuffer);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
@@ -158,7 +158,7 @@ void Scene::AddChunkAtPosition(glm::vec3 pos, int chunkSize)
 	std::vector<glm::vec3> posits = chunks[chunks.size() - 1].getPositions();
 	positions.insert(positions.end(), posits.begin(), posits.end());
 
-	std::vector<glm::vec3> points = chunks[chunks.size()-1].getVertices();
+	std::vector<glm::vec3> points = chunks[chunks.size() - 1].getVertices();
 	vertices.insert(vertices.end(), points.begin(), points.end());
 
 	std::vector<glm::vec3> voxelNormals = chunks[chunks.size() - 1].getNormals();
@@ -211,7 +211,7 @@ void Scene::TranslateCamera(CameraDirection dir)
 
 	if (dir == CameraDirection::forward)
 	{
-		camPosition += glm::normalize(direction-camPosition) * deltaTime * camSpeed;
+		camPosition += glm::normalize(direction - camPosition) * deltaTime * camSpeed;
 	}
 	else if (dir == CameraDirection::backward)
 	{
@@ -247,16 +247,16 @@ void Scene::computeMatrixes(int winWidth, int winHeight, double xPos, double yPo
 	horizontalAngle += mouseSpeed * deltaTime * float(winWidth / 2 - xPos);
 	verticalAngle += mouseSpeed * deltaTime * float(winHeight / 2 - yPos);
 
-	direction=glm::vec3(
+	direction = glm::vec3(
 		cos(verticalAngle) * sin(horizontalAngle),
 		sin(verticalAngle),
 		cos(verticalAngle) * cos(horizontalAngle)
 	);
 
 	right = glm::vec3(
-		sin(horizontalAngle - 3.14f/2.0f),
+		sin(horizontalAngle - 3.14f / 2.0f),
 		0,
-		cos(horizontalAngle - 3.14f/2.0f)
+		cos(horizontalAngle - 3.14f / 2.0f)
 	);
 
 	up = glm::cross(right, direction);
@@ -272,7 +272,7 @@ void Scene::computeMatrixes(int winWidth, int winHeight, double xPos, double yPo
 
 void Scene::zoomFoV(float val)
 {
-	FoV = glm::radians( initialFoV - glm::radians(5 * val) );
+	FoV = glm::radians(initialFoV - glm::radians(5 * val));
 	proj = glm::perspective(FoV, 16.0f / 9.0f, 0.1f, 3000.0f);
 }
 
@@ -396,4 +396,16 @@ void Scene::Destroy()
 	//glDeleteBuffers(1, &voxelElementBuffer);
 	glDeleteProgram(program);
 	glDeleteVertexArrays(1, &VertexArrayID);
+}
+
+void Scene::AddPointVertices(Surface3D surf)
+{
+	for (int i = 0;i < surf.get_Edges().size();++i)
+	{
+		pointVertices.push_back(surf.get_Edges()[i]->get_A());
+	}
+	if (!surf.get_Close())
+	{
+		pointVertices.push_back(surf.get_Edges()[surf.get_Edges().size() - 1]->get_B());
+	}
 }

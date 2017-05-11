@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "imgui\imgui.h"
 #include "imgui_impl_glfw_gl3.h"
-#include <stdio.h>
+#include <cstdio>
 #include <gl3w\GL\gl3w.h>
 #include <glfw\include\GLFW\glfw3.h>
 
@@ -132,6 +132,9 @@ int main ( int , char** )
 
 	Surface3D * res = SimpleCornerCutting::sCutting ( s );
 
+	for (int i = 0; i < s->get_NbrEdges(); ++i)
+		
+
 	int i = 0;
 
 	// Main loop
@@ -212,6 +215,7 @@ int main ( int , char** )
 		}
 
 		// Rendering
+		
 		int display_w , display_h;
 		glfwGetFramebufferSize ( window , &display_w , &display_h );
 		glViewport ( 0 , 0 , display_w , display_h );

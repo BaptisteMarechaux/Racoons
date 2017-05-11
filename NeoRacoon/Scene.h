@@ -12,6 +12,7 @@
 #include "Input.h"
 #include "Voxel.h"
 #include "Chunk.h"
+#include "Surface3D.h"
 
 enum CameraDirection {
 	forward,
@@ -122,6 +123,7 @@ public:
 	void resetScene();
 	void Destroy();
 
-	
+
+	void AddPointVertices(Surface3D surf);
 };
 
