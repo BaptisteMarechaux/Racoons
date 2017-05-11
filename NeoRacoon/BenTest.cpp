@@ -10,7 +10,7 @@
 
 
 
-int testCatMull()
+RenderableMesh testCatMull()
 {
 	Mesh cube;
 	cube.vertices.insert(cube.vertices.begin(), {
@@ -56,14 +56,14 @@ int testCatMull()
 
 
 
-	Mesh catmull_run = CatMull(cube);
+	return CatMull(cube).getRenderableMesh();
 
-	return 0;
+	
 }
 
 
 
-int testLoops()
+RenderableMesh testLoops()
 {
 	Mesh cube;
 	cube.vertices.insert(cube.vertices.begin(), {
@@ -125,9 +125,6 @@ int testLoops()
 		Face({ 1, 5, 6 },{ 16, 6, 11 }),
 	});
 
+	return Loops(cube).getRenderableMesh();
 
-
-	Mesh loops_run = Loops(cube);
-
-	return 0;
 }

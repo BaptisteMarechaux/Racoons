@@ -6,7 +6,7 @@
 #include <initializer_list>
 #include <algorithm>
 
-
+#include <glm.hpp>
 
 struct Vertex
 {
@@ -81,6 +81,8 @@ struct RenderableMesh
 {
 	std::vector<float> vertices;
 	std::vector<uint16_t> indices;
+
+	std::vector<glm::vec3> toVec3() const;
 };
 
 struct Mesh

@@ -18,7 +18,6 @@ Scene::Scene()
 	mvp = proj * view * model;
 
 	input = Input();
-	chunks = std::vector<Chunk>();
 	//g_vertex_buffer_data = std::vector<glm::vec3>();
 	positions = std::vector<glm::vec3>();
 	//indices = std::vector<GLuint>();
@@ -41,29 +40,36 @@ void Scene::Initialize()
 	glDepthFunc(GL_LESS);
 
 	program = LoadShaders("..\\shaders\\basic.vs", "..\\shaders\\basic.fs");
+	position_location = glGetAttribLocation(program, "vertexPosition_modelspace");
 	mvp_location = glGetUniformLocation(program, "MVP");
+	color_location = glGetUniformLocation(program, "vertexColor");
 
 	glGenVertexArrays(1, &voxelVertexArrayID);
 	glBindVertexArray(voxelVertexArrayID);
-
 	glGenBuffers(1, &vertexBufferPoints);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-			glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glGenBuffers(1, &normalbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normals.size(), normals.data(), GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(position_location);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glBindVertexArray(0);
 
 	glGenVertexArrays(1, &originShapeVertexArrayID);
 	glBindVertexArray(originShapeVertexArrayID);
+	glGenBuffers(1, &originShapeVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, originShapeVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * originShapeVertices.size(), originShapeVertices.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(position_location);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBindVertexArray(0);
+	
 
+	glGenVertexArrays(1, &catMullVertexArrayID);
+	glBindVertexArray(catMullVertexArrayID);
+	glGenBuffers(1, &catmullVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, catmullVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * catmullVertices.size(), catmullVertices.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(position_location);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glBindVertexArray(0);
 
 	lastTime = glfwGetTime();
@@ -89,16 +95,13 @@ void Scene::UpdateBuffers()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPoints);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
-
 	glBindBuffer(GL_ARRAY_BUFFER, originShapeVertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, originShapeVertices.size() * sizeof(glm::vec3), originShapeVertices.data(), GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, catmullVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, catmullVertices.size() * sizeof(glm::vec3), catmullVertices.data(), GL_STATIC_DRAW);
+
 }
-
-
-
 
 
 void Scene::TranslateCamera(glm::vec3 v)
@@ -212,6 +215,15 @@ void Scene::AddLine()
 void Scene::AddOriginCornerCutPoints(std::vector<glm::vec3> v)
 {
 	originShapeVertices.insert(originShapeVertices.end(), v.begin(), v.end());
+	UpdateBuffers();
+}
+
+void Scene::AddCatMullShape()
+{
+	RenderableMesh mesh = testCatMull();
+	catmullVertices = mesh.toVec3();
+
+	UpdateBuffers();
 }
 
 void Scene::GeometryPass()
@@ -219,10 +231,24 @@ void Scene::GeometryPass()
 	glUseProgram(program);
 	glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
+	glProgramUniform4fv(program, color_location, 1, defaultFragmentColor);
 	glBindVertexArray(voxelVertexArrayID);
 	glPointSize(5);
 	glDrawArrays(GL_POINTS, 0, vertices.size());
-	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+	glDrawArrays(GL_LINE_LOOP, 0, vertices.size());
+
+	glProgramUniform4fv(program, color_location, 1, originShapeFragmentColor);
+	glBindVertexArray(originShapeVertexArrayID);
+	glPointSize(5);
+	glDrawArrays(GL_POINTS, 0, originShapeVertices.size());
+	glDrawArrays(GL_LINE_LOOP, 0, originShapeVertices.size());
+
+
+	glProgramUniform4fv(program, color_location, 1, catmullFragmentColor);
+	glBindVertexArray(catMullVertexArrayID);
+	glPointSize(3);
+	glDrawArrays(GL_POINTS, 0, catmullVertices.size());
+	glDrawArrays(GL_LINES, 0, catmullVertices.size());
 
 	glBindVertexArray(0);
 }
@@ -237,10 +263,11 @@ float Scene::RandomFloat(float a, float b)
 
 void Scene::resetScene()
 {
-	chunks.clear();
 	normals.clear();
 	positions.clear();
 	vertices.clear();
+	catmullVertices.clear();
+	originShapeVertices.clear();
 
 	UpdateBuffers();
 }
@@ -259,7 +286,7 @@ void Scene::AddPointVertices(Surface3D surf, glm::vec3 position)
 	{
 		vertices.push_back(surf.get_Edges()[i]->get_A());
 	}
-	if (!surf.get_Close())
+	if (surf.get_Close())
 	{
 		vertices.push_back(surf.get_Edges()[surf.get_Edges().size() - 1]->get_B());
 	}

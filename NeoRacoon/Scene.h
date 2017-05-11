@@ -13,6 +13,7 @@
 #include "Voxel.h"
 #include "Chunk.h"
 #include "Surface3D.h"
+#include "BenTest.h"
 
 enum CameraDirection {
 	forward,
@@ -28,14 +29,18 @@ private:
 	glm::mat4 model, proj, mvp, view;
 	//General Elements
 	GLfloat defaultFragmentColor[4] = { 0.6f, 0, 0.4f, 1 };
+	GLfloat originShapeFragmentColor[4] = { 1, 1, 1, 1 };
+
+	GLfloat catmullFragmentColor[4] = { 0.2f, 0.4f, 0.8f };
 
 	//Buffers
 	GLuint vertexBufferPoints;
 	GLuint normalbuffer;
 	//Other Buffers
+	GLuint catmullVertexBuffer;
 	GLuint originShapeVertexBuffer;
 
-	std::vector<glm::vec3> normals, positions, vertices, originShapeVertices;
+	std::vector<glm::vec3> normals, positions, vertices, originShapeVertices, catmullVertices;
 	std::vector<GLuint> indices;
 
 	//Shader References
@@ -43,13 +48,12 @@ private:
 	GLuint position_location, color_location, mvp_location, light_location;
 	GLuint MatrixID, VertexArrayID, LightID, ModelMatrixID, ViewMatrixID, deltaTimeID;
 
-	//SSAO Locations
-	GLuint ssao_posTextureUnitLocation, ssao_sampleRadLocation, ssao_projMatrixLocation, ssao_kernelLocation;
+	
 
 	//VAO
 	GLuint voxelVertexArrayID;
-
 	GLuint originShapeVertexArrayID;
+	GLuint catMullVertexArrayID;
 
 	float lastTime;
 	float currentTime;
@@ -62,8 +66,6 @@ private:
 	std::vector<glm::vec3> computedVertices, computedNormals;
 	std::vector<GLuint> computedIndices;
 
-	//Chunks
-	std::vector<Chunk> chunks;
 
 	//Camera management
 	glm::vec3 camPosition = glm::vec3(4, 3, 20);
@@ -101,6 +103,8 @@ public:
 	void AddLine();
 
 	void AddOriginCornerCutPoints(std::vector<glm::vec3>);
+
+	void AddCatMullShape();
 
 	//Render Passes
 	void GeometryPass(); 

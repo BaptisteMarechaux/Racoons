@@ -107,12 +107,10 @@ int main ( int , char** )
 
 	bool show_test_window = true;
 	bool reset = false;
-	bool addAVoxel = false;
-	bool addChunk = false;
-	bool addSpherizedChunk = false;
 	bool show_another_window = false;
 	bool addCornerCutLine = false;
-	ImVec4 clear_color = ImColor ( 114 , 144 , 154 );
+	bool addCatmull = false;
+	ImVec4 clear_color = ImColor ( 12 , 14 , 17 );
 
 	Initialize ( );
 
@@ -136,8 +134,7 @@ int main ( int , char** )
 	Surface3D * s = new Surface3D ( edges , true );
 
 	Surface3D * res = SimpleCornerCutting::sCutting ( s );
-		
-
+	
 	int i = 0;
 
 	// Main loop
@@ -159,6 +156,7 @@ int main ( int , char** )
 		ImGui::Text ( "Add Things" );
 		ImGui::DragFloat3 ( "Position" , ( float* ) &newVoxelPosition );
 		if (ImGui::Button("Add  Corner Cut Line")) addCornerCutLine ^= 1;
+		if (ImGui::Button("Add  Catmull Shape")) addCatmull ^= 1;
 
 		ImGui::Separator ( );
 		if ( ImGui::Button ( "Reset" ) ) reset ^= 1;
@@ -190,7 +188,21 @@ int main ( int , char** )
 		{
 			glm::vec3 pos = glm::vec3(newVoxelPosition[0], newVoxelPosition[1], newVoxelPosition[2]);
 			mainScene->AddPointVertices(*res, pos);
+
+			std::vector<glm::vec3> originPoints;
+			originPoints.push_back(A);
+			originPoints.push_back(B);
+			originPoints.push_back(C);
+			originPoints.push_back(D);
+
+			mainScene->AddOriginCornerCutPoints(originPoints);
 			addCornerCutLine = false;
+		}
+
+		if (addCatmull)
+		{
+			mainScene->AddCatMullShape();
+			addCatmull = false;
 		}
 
 		if ( reset )

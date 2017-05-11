@@ -1,5 +1,7 @@
 #pragma once
 
-int testCatMull();
+#include "MeshUtils.h"
 
-int testLoops();
+RenderableMesh testCatMull();
+
+RenderableMesh testLoops();
