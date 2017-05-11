@@ -1,3 +1,5 @@
 #pragma once
 
-int testCurves();
+int testCatMull();
+
+int testLoops();

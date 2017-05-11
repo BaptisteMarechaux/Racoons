@@ -18,6 +18,8 @@
 #include "Edge3D.h"
 #include "SimpleCornerCutting.h"
 
+#include "BenTest.h"
+
 GLFWwindow* window;
 GLuint vertexBufferPoints , vaoPoints , colorbuffer;
 
@@ -101,6 +103,8 @@ float frand_a_b ( float a , float b )
 
 int main ( int , char** )
 {
+	testLoops();
+
 	bool show_test_window = true;
 	bool reset = false;
 	bool addAVoxel = false;

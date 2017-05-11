@@ -22,10 +22,10 @@ void CatMullData::build(const Mesh &mesh)
 		mid_points.push_back(getEdgeMidPoint(mesh, i));
 	}
 
-	for (int i = 0; i < mesh.faces.size(); ++i)
+	for (int i = 0; i < static_cast<int>(mesh.faces.size()); ++i)
 		face_points.push_back(getFaceCenter(mesh, i));
 
-	for (int i = 0; i < mesh.vertices.size(); ++i)
+	for (int i = 0; i < static_cast<int>(mesh.vertices.size()); ++i)
 		vertex_points.push_back(getVertexPoint(mesh, i));
 }
 
