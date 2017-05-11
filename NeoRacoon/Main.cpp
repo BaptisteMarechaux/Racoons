@@ -113,10 +113,10 @@ int main ( int , char** )
 	Initialize ( );
 
 	//Points
-	glm::vec3 A = glm::vec3 ( 1 , 2 , 0 );
-	glm::vec3 B = glm::vec3 ( 1 , 6 , 0 );
-	glm::vec3 C = glm::vec3 ( 9 , 7 , 0 );
-	glm::vec3 D = glm::vec3 ( 10 , 3 , 0 );
+	glm::vec3 A = glm::vec3 ( -3 , -3 , 0 );
+	glm::vec3 B = glm::vec3 ( 3 , -3 , 0 );
+	glm::vec3 C = glm::vec3 ( 3 , 3 , 0 );
+	glm::vec3 D = glm::vec3 ( -3 , 3 , 0 );
 	//Edges
 	Edge3D * AB = new Edge3D ( A , B );
 	Edge3D * BC = new Edge3D ( B , C );
@@ -182,31 +182,10 @@ int main ( int , char** )
 			ImGui::ShowTestWindow ( &show_test_window );
 		}
 
-		if ( addAVoxel )
-		{
-			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
-			mainScene->AddVoxelAtPosition ( pos );
-			addAVoxel = false;
-		}
-
-		if ( addChunk )
-		{
-			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
-			mainScene->AddChunkAtPosition ( pos , newChunkSize );
-			addChunk = false;
-		}
-
-		if ( addSpherizedChunk )
-		{
-			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
-			mainScene->AddSpherizedChunkAtPosition ( pos , newChunkSize );
-			//mainScene->AddChunkAtPosition(pos);
-			addSpherizedChunk = false;
-		}
-
 		if (addCornerCutLine)
 		{
-			mainScene->AddPointVertices(*res);
+			glm::vec3 pos = glm::vec3(newVoxelPosition[0], newVoxelPosition[1], newVoxelPosition[2]);
+			mainScene->AddPointVertices(*res, pos);
 			addCornerCutLine = false;
 		}
 

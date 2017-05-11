@@ -31,16 +31,12 @@ private:
 
 	//Buffers
 	GLuint vertexBufferPoints;
-	GLuint uvbuffer, normalbuffer, occlusioncolorbuffer;
+	GLuint normalbuffer;
 	//Other Buffers
-	GLuint singlePointsVertexBuffer;
-	GLuint lineVertexBuffer;
+	GLuint originShapeVertexBuffer;
 
-	std::vector<glm::vec3> normals, positions, vertices;
-	std::vector<float> occlusionColors;
+	std::vector<glm::vec3> normals, positions, vertices, originShapeVertices;
 	std::vector<GLuint> indices;
-	//Other Arrays
-	std::vector<glm::vec3> pointVertices, lineVertices;
 
 	//Shader References
 	GLuint program, ssaoProgram;
@@ -53,9 +49,7 @@ private:
 	//VAO
 	GLuint voxelVertexArrayID;
 
-	GLuint pointsVertexArrayID;
-	GLuint linesVertexArrayID;
-
+	GLuint originShapeVertexArrayID;
 
 	float lastTime;
 	float currentTime;
@@ -94,9 +88,7 @@ public:
 	void Initialize();
 	void Render();
 	void UpdateBuffers();
-	void AddVoxelAtPosition(glm::vec3 pos);
-	void AddChunkAtPosition(glm::vec3 pos, int chunkSize);
-	void AddSpherizedChunkAtPosition(glm::vec3 pos, int chunkSize);
+	
 	glm::vec3 getCameraPosition();
 	void TranslateCamera(glm::vec3 v);
 	void TranslateCamera(CameraDirection direction);
@@ -108,16 +100,16 @@ public:
 
 	void AddLine();
 
-	void AddPoints();
+	void AddOriginCornerCutPoints(std::vector<glm::vec3>);
 
 	//Render Passes
-	void GeometryPass();
+	void GeometryPass(); 
 
 	float RandomFloat(float a, float b);
 	void resetScene();
 	void Destroy();
 
 
-	void AddPointVertices(Surface3D surf);
+	void AddPointVertices(Surface3D surf, glm::vec3 position);
 };
 
