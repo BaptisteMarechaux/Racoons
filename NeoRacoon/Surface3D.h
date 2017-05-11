@@ -15,6 +15,7 @@ class Surface3D
 
 	std::vector<Edge3D*> get_Edges ( ) const;
 	bool get_Close ( ) const;
+	int get_NbrEdges ( ) const;
 	~Surface3D ( );
 };
 

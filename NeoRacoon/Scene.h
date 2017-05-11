@@ -12,6 +12,7 @@
 #include "Input.h"
 #include "Voxel.h"
 #include "Chunk.h"
+#include "Surface3D.h"
 
 enum CameraDirection {
 	forward,
@@ -71,7 +72,7 @@ private:
 	std::vector<Chunk> chunks;
 
 	//Camera management
-	glm::vec3 camPosition = glm::vec3(4, 3, 10);
+	glm::vec3 camPosition = glm::vec3(4, 3, 20);
 	float horizontalAngle = 3.14f;
 	float verticalAngle = 0.0f;
 	float initialFoV = glm::radians(45.0f);
@@ -111,17 +112,12 @@ public:
 
 	//Render Passes
 	void GeometryPass();
-	void SSAOPass();
-	void BlurPass();
-
-	//SSAO
-	void GenerateSampleKernel();
-	void UpdateNeighbours();
 
 	float RandomFloat(float a, float b);
 	void resetScene();
 	void Destroy();
 
-	
+
+	void AddPointVertices(Surface3D surf);
 };
 

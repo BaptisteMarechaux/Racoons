@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "imgui\imgui.h"
 #include "imgui_impl_glfw_gl3.h"
-#include <stdio.h>
+#include <cstdio>
 #include <gl3w\GL\gl3w.h>
 #include <glfw\include\GLFW\glfw3.h>
 
@@ -111,6 +111,7 @@ int main ( int , char** )
 	bool addChunk = false;
 	bool addSpherizedChunk = false;
 	bool show_another_window = false;
+	bool addCornerCutLine = false;
 	ImVec4 clear_color = ImColor ( 114 , 144 , 154 );
 
 	Initialize ( );
@@ -135,6 +136,7 @@ int main ( int , char** )
 	Surface3D * s = new Surface3D ( edges , true );
 
 	Surface3D * res = SimpleCornerCutting::sCutting ( s );
+		
 
 	int i = 0;
 
@@ -154,12 +156,9 @@ int main ( int , char** )
 
 		ImGui::Columns ( 1 );
 		ImGui::Separator ( );
-		ImGui::Text ( "Add a Voxel/Chunk" );
+		ImGui::Text ( "Add Things" );
 		ImGui::DragFloat3 ( "Position" , ( float* ) &newVoxelPosition );
-		if ( ImGui::Button ( "Add A Voxel" ) ) addAVoxel ^= 1;
-		ImGui::DragInt ( "Chunk Size" , ( int* ) &newChunkSize );
-		if ( ImGui::Button ( "Add A Chunk" ) ) addChunk ^= 1;
-		if ( ImGui::Button ( "Add A Spheric Chunk" ) ) addSpherizedChunk ^= 1;
+		if (ImGui::Button("Add  Corner Cut Line")) addCornerCutLine ^= 1;
 
 		ImGui::Separator ( );
 		if ( ImGui::Button ( "Reset" ) ) reset ^= 1;
@@ -209,6 +208,12 @@ int main ( int , char** )
 			addSpherizedChunk = false;
 		}
 
+		if (addCornerCutLine)
+		{
+			mainScene->AddPointVertices(*res);
+			addCornerCutLine = false;
+		}
+
 		if ( reset )
 		{
 			mainScene->resetScene ( );
@@ -216,6 +221,7 @@ int main ( int , char** )
 		}
 
 		// Rendering
+		
 		int display_w , display_h;
 		glfwGetFramebufferSize ( window , &display_w , &display_h );
 		glViewport ( 0 , 0 , display_w , display_h );
