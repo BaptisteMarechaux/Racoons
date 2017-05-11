@@ -170,6 +170,7 @@
     <ClInclude Include="Edge3D.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Loops.h" />
+    <ClInclude Include="MeshUtils.h" />
     <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SimpleCornerCutting.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Edge3D.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Loops.cpp" />
+    <ClCompile Include="MeshUtils.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SimpleCornerCutting.cpp" />
