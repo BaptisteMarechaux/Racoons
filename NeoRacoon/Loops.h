@@ -26,7 +26,7 @@ private:
 
 namespace loops_internal
 {
-	float getAlpha(size_t n);
+	float Loops_getAlpha(size_t n);
 
 	int Loops_get_vert_id(const Edge &edge0, const Edge &edge1);
 

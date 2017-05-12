@@ -6,6 +6,7 @@
 
 #include "CatMull.h"
 #include "Loops.h"
+#include "Kobbelt.h"
 
 
 
@@ -127,7 +128,7 @@ int testLoops()
 
 
 
-	Mesh loops_run = Loops(cube);
+	auto loops_run = (cube = Kobbelt(cube)).getRenderableMesh();
 
 	return 0;
 }

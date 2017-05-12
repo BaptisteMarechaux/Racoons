@@ -33,7 +33,7 @@ Vertex LoopsData::getEdgePoint(const Mesh &mesh, int edge_id)
 
 	Vertex ret;
 	int v1_id = mesh.edges[edge_id].vertices[0], v2_id = mesh.edges[edge_id].vertices[1];
-	const Vertex &v1(vertex_points[v1_id]), &v2(vertex_points[v2_id]);
+	const Vertex &v1(mesh.vertices[v1_id]), &v2(mesh.vertices[v2_id]);
 	auto face_ids = mesh.getConnectedFacesToEdge(edge_id);
 	std::vector<int> v_ids;
 	for (size_t i = 0; i < face_ids.size(); ++i)
@@ -50,7 +50,7 @@ Vertex LoopsData::getEdgePoint(const Mesh &mesh, int edge_id)
 	Vertex v_other;
 	for (auto it = v_ids.begin(); it != v_ids.end(); ++it)
 	{
-		const Vertex &v = vertex_points[*it];
+		const Vertex &v = mesh.vertices[*it];
 		v_other.x += v.x;
 		v_other.y += v.y;
 		v_other.z += v.z;
@@ -76,7 +76,7 @@ Vertex LoopsData::getVertexPoint(const Mesh &mesh, int vert_id)
 	const Vertex &v = mesh.vertices[vert_id];
 
 	auto v_ids = mesh.getConnectedVertices(vert_id);
-	float alpha = loops_internal::getAlpha(v_ids.size());
+	float alpha = loops_internal::Loops_getAlpha(v_ids.size());
 	float n_alpha = 1 - (v_ids.size() * alpha);
 
 	Vertex ret(n_alpha * v.x, n_alpha * v.y, n_alpha * v.z);
@@ -96,7 +96,7 @@ Vertex LoopsData::getVertexPoint(const Mesh &mesh, int vert_id)
 
 
 
-float loops_internal::getAlpha(size_t n)
+float loops_internal::Loops_getAlpha(size_t n)
 {
 	if (n == 3)
 		return 3.0f / 16.0f;
