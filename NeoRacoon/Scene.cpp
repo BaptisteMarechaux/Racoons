@@ -218,25 +218,25 @@ void Scene::AddOriginCornerCutPoints ( std::vector<glm::vec3> v )
 	UpdateBuffers ( );
 }
 
-void Scene::AddCatMullShape ( )
+void Scene::AddCatMullShape (int iter )
 {
-	RenderableMesh mesh = testCatMull ( );
+	RenderableMesh mesh = testCatMull ( iter );
 	catmullVertices = mesh.toVec3 ( );
 
 	UpdateBuffers ( );
 }
 
-void Scene::AddLoopShape ( )
+void Scene::AddLoopShape ( int iter )
 {
-	RenderableMesh mesh = testLoops ( );
+	RenderableMesh mesh = testLoops ( iter);
 	catmullVertices = mesh.toVec3 ( );
 
 	UpdateBuffers ( );
 }
 
-void Scene::AddKobbeltShape()
+void Scene::AddKobbeltShape(int iter )
 {
-	RenderableMesh mesh = testLoops();
+	RenderableMesh mesh = testKobbelt(iter );
 	catmullVertices = mesh.toVec3();
 
 	UpdateBuffers();

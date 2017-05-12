@@ -105,7 +105,7 @@ float frand_a_b ( float a , float b )
 
 int main ( int , char** )
 {
-	testLoops ( );
+	//testLoops ( );
 
 	bool show_test_window = true;
 	bool reset = false;
@@ -113,6 +113,7 @@ int main ( int , char** )
 	bool addCornerCutLine = false;
 	bool addCatmull = false;
 	bool addLoop = false;
+	bool addKobbelt = false;
 	ImVec4 clear_color = ImColor ( 12 , 14 , 17 );
 
 	Initialize ( );
@@ -162,6 +163,7 @@ int main ( int , char** )
 		if ( ImGui::Button ( "Add  Corner Cut Line" ) ) addCornerCutLine ^= 1;
 		if ( ImGui::Button ( "Add  Catmull Shape" ) ) addCatmull ^= 1;
 		if ( ImGui::Button ( "Add  Loop Shape" ) ) addLoop ^= 1;
+		if (ImGui::Button("Add  Kobbelt Shape")) addKobbelt ^= 1;
 		ImGui::Separator ( );
 		ImGui::ColorEdit3 ( "Default color" , ( float* ) &mainScene->defaultFragmentColor );
 		ImGui::ColorEdit3 ( "Simple Line color" , ( float* ) &mainScene->originShapeFragmentColor );
@@ -207,14 +209,20 @@ int main ( int , char** )
 
 		if ( addCatmull )
 		{
-			mainScene->AddCatMullShape ( );
+			mainScene->AddCatMullShape ( iters);
 			addCatmull = false;
 		}
 
 		if ( addLoop )
 		{
-			mainScene->AddLoopShape ( );
+			mainScene->AddLoopShape ( iters );
 			addLoop = false;
+		}
+
+		if (addKobbelt)
+		{
+			mainScene->AddKobbeltShape(iters);
+			addKobbelt = false;
 		}
 
 		if ( reset )

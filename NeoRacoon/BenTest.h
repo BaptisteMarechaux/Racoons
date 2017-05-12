@@ -1,7 +1,10 @@
 #pragma once
 
 #include "MeshUtils.h"
+#include "Kobbelt.h"
 
-RenderableMesh testCatMull();
+RenderableMesh testCatMull(int);
 
-RenderableMesh testLoops();
+RenderableMesh testLoops(int);
+
+RenderableMesh testKobbelt(int);

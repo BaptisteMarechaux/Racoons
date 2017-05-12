@@ -14,6 +14,7 @@
 #include "Chunk.h"
 #include "Surface3D.h"
 #include "BenTest.h"
+#include "Kobbelt.h"
 
 enum CameraDirection {
 	forward,
@@ -106,9 +107,9 @@ public:
 
 	void AddOriginCornerCutPoints(std::vector<glm::vec3>);
 
-	void AddCatMullShape();
-	void AddLoopShape();
-	void AddKobbeltShape();
+	void AddCatMullShape(int iter);
+	void AddLoopShape(int iter);
+	void AddKobbeltShape(int iter);
 	//Render Passes
 	void GeometryPass(); 
 
