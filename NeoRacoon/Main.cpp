@@ -139,13 +139,6 @@ int main ( int , char** )
 	//Surface
 	Surface3D * s = new Surface3D ( edges , false );
 
-	Surface3D * res = SimpleCornerCutting::sCutting ( s , 1 );
-
-
-	int i = 0;
-
-
-
 	// Main loop
 	while ( !glfwWindowShouldClose ( window ) )
 	{
@@ -201,7 +194,7 @@ int main ( int , char** )
 
 		if ( addCornerCutLine )
 		{
-			res = SimpleCornerCutting::sCutting ( s , iters );
+			Surface3D * res = SimpleCornerCutting::sCutting ( s , iters );
 
 			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
 			mainScene->AddPointVertices ( *res , pos );
