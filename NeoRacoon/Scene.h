@@ -15,20 +15,21 @@
 #include "Surface3D.h"
 #include "BenTest.h"
 
-enum CameraDirection {
-	forward,
-	backward,
-	left,
+enum CameraDirection
+{
+	forward ,
+	backward ,
+	left ,
 	right
 };
 
 class Scene
 {
-private:
-	//Matrix
-	glm::mat4 model, proj, mvp, view;
+	private:
+		//Matrix
+	glm::mat4 model , proj , mvp , view;
 	//General Elements
-	
+
 
 	//Buffers
 	GLuint vertexBufferPoints;
@@ -37,15 +38,15 @@ private:
 	GLuint catmullVertexBuffer;
 	GLuint originShapeVertexBuffer;
 
-	std::vector<glm::vec3> normals, positions, vertices, originShapeVertices, catmullVertices;
+	std::vector<glm::vec3> normals , positions , vertices , originShapeVertices , catmullVertices;
 	std::vector<GLuint> indices;
 
 	//Shader References
-	GLuint program, ssaoProgram;
-	GLuint position_location, color_location, mvp_location, light_location;
-	GLuint MatrixID, VertexArrayID, LightID, ModelMatrixID, ViewMatrixID, deltaTimeID;
+	GLuint program , ssaoProgram;
+	GLuint position_location , color_location , mvp_location , light_location;
+	GLuint MatrixID , VertexArrayID , LightID , ModelMatrixID , ViewMatrixID , deltaTimeID;
 
-	
+
 
 	//VAO
 	GLuint voxelVertexArrayID;
@@ -56,21 +57,21 @@ private:
 	float currentTime;
 	float deltaTime;
 
-	float lightPos[3] = { 3, 3, 0 };
+	float lightPos [ 3 ] = { 3, 3, 0 };
 
 	Input input;
 
-	std::vector<glm::vec3> computedVertices, computedNormals;
+	std::vector<glm::vec3> computedVertices , computedNormals;
 	std::vector<GLuint> computedIndices;
 
 
 	//Camera management
-	glm::vec3 camPosition = glm::vec3(4, 3, 20);
+	glm::vec3 camPosition = glm::vec3 ( 4 , 3 , 20 );
 	float horizontalAngle = 3.14f;
 	float verticalAngle = 0.0f;
-	float initialFoV = glm::radians(45.0f);
+	float initialFoV = glm::radians ( 45.0f );
 	float FoV;
-	glm::vec3 direction, up, right;
+	glm::vec3 direction , up , right;
 
 	float camSpeed = 0.2f;
 	float mouseSpeed = 0.001f;
@@ -80,42 +81,43 @@ private:
 	int kernelSize = 10;
 	std::vector<glm::vec3> kernel;
 
-public:
-	Scene();
-	~Scene();
+	public:
+	Scene ( );
+	~Scene ( );
 
-	GLfloat defaultFragmentColor[4] = { 0.6f, 0, 0.4f, 1 };
-	GLfloat originShapeFragmentColor[4] = { 1, 1, 1, 1 };
+	GLfloat defaultFragmentColor [ 4 ] = { 0.6f, 0, 0.4f, 1 };
+	GLfloat originShapeFragmentColor [ 4 ] = { 1, 1, 1, 1 };
 
-	GLfloat catmullFragmentColor[4] = { 0.2f, 0.4f, 0.8f };
+	GLfloat catmullFragmentColor [ 4 ] = { 0.2f, 0.4f, 0.8f };
 
-	void Initialize();
-	void Render();
-	void UpdateBuffers();
-	
-	glm::vec3 getCameraPosition();
-	void TranslateCamera(glm::vec3 v);
-	void TranslateCamera(CameraDirection direction);
-	int getVertexCount();
-	void computeMatrixes(int winWidth, int winHeight, double xPos, double yPos);
-	void zoomFoV(float);
+	void Initialize ( );
+	void Render ( );
+	void UpdateBuffers ( );
 
-	void AutoRotateCamera(float speed, float distance=500);
+	glm::vec3 getCameraPosition ( );
+	void TranslateCamera ( glm::vec3 v );
+	void TranslateCamera ( CameraDirection direction );
+	int getVertexCount ( );
+	void computeMatrixes ( int winWidth , int winHeight , double xPos , double yPos );
+	void zoomFoV ( float );
 
-	void AddLine();
+	void AutoRotateCamera ( float speed , float distance = 500 );
 
-	void AddOriginCornerCutPoints(std::vector<glm::vec3>);
+	void AddLine ( );
 
-	void AddCatMullShape();
-	void AddLoopShape();
+	void AddOriginCornerCutPoints ( std::vector<glm::vec3> );
+
+	void AddCatMullShape ( );
+	void AddLoopShape ( );
 	//Render Passes
-	void GeometryPass(); 
+	void GeometryPass ( );
 
-	float RandomFloat(float a, float b);
-	void resetScene();
-	void Destroy();
+	float RandomFloat ( float a , float b );
+	void resetScene ( );
+	void Destroy ( );
 
 
-	void AddPointVertices(Surface3D surf, glm::vec3 position);
+	void AddPointVertices ( Surface3D surf , glm::vec3 position );
+	void Scene::AddPointOriginShapeVertices ( Surface3D surf , glm::vec3 position );
 };
 

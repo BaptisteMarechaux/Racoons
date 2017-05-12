@@ -118,33 +118,33 @@ int main ( int , char** )
 	Initialize ( );
 
 	//Points
-	glm::vec3 A = glm::vec3 ( 15 , -0 , 0 );
-	glm::vec3 B = glm::vec3 ( 3 , -15 , 0 );
+	glm::vec3 A = glm::vec3 ( 3 , -0 , 0 );
+	glm::vec3 B = glm::vec3 ( 0.5f , -3 , 0 );
 	glm::vec3 C = glm::vec3 ( 0 , 0 , 0 );
-	glm::vec3 D = glm::vec3 ( -27 , 8 , 0 );
-	glm::vec3 E = glm::vec3 ( 4 , 12 , 0 );
+	glm::vec3 D = glm::vec3 ( -5 , 4 , 0 );
+	glm::vec3 E = glm::vec3 ( 1 , 3 , 0 );
 	//Edges
 	Edge3D * AB = new Edge3D ( A , B );
 	Edge3D * BC = new Edge3D ( B , C );
 	Edge3D * CD = new Edge3D ( C , D );
 	Edge3D * DE = new Edge3D ( D , E );
-	Edge3D * EA = new Edge3D ( E , A );
+	//Edge3D * EA = new Edge3D ( E , A );
 	std::vector<Edge3D*> edges;
 	edges.push_back ( AB );
 	edges.push_back ( BC );
 	edges.push_back ( CD );
 	edges.push_back ( DE );
-	edges.push_back ( EA );
+	//edges.push_back ( EA );
 
 	//Surface
-	Surface3D * s = new Surface3D ( edges , true );
+	Surface3D * s = new Surface3D ( edges , false );
 
-	Surface3D * res = SimpleCornerCutting::sCutting ( s , 10 );
+	Surface3D * res = SimpleCornerCutting::sCutting ( s , 1 );
 
 
 	int i = 0;
 
-	
+
 
 	// Main loop
 	while ( !glfwWindowShouldClose ( window ) )
@@ -161,18 +161,18 @@ int main ( int , char** )
 
 
 		ImGui::Columns ( 1 );
-		ImGui::Separator();
-		ImGui::InputInt("Iterations", &iters);
+		ImGui::Separator ( );
+		ImGui::InputInt ( "Iterations" , &iters );
 		ImGui::Separator ( );
 		ImGui::Text ( "Add Things" );
 		ImGui::DragFloat3 ( "Position" , ( float* ) &newVoxelPosition );
-		if (ImGui::Button("Add  Corner Cut Line")) addCornerCutLine ^= 1;
-		if (ImGui::Button("Add  Catmull Shape")) addCatmull ^= 1;
-		if (ImGui::Button("Add  Loop Shape")) addLoop ^= 1;
-		ImGui::Separator();
-		ImGui::ColorEdit3("Default color", (float*)&mainScene->defaultFragmentColor);
-		ImGui::ColorEdit3("Simple Line color", (float*)&mainScene->originShapeFragmentColor);
-		ImGui::ColorEdit3("Catmull/Loops color", (float*)&mainScene->catmullFragmentColor);
+		if ( ImGui::Button ( "Add  Corner Cut Line" ) ) addCornerCutLine ^= 1;
+		if ( ImGui::Button ( "Add  Catmull Shape" ) ) addCatmull ^= 1;
+		if ( ImGui::Button ( "Add  Loop Shape" ) ) addLoop ^= 1;
+		ImGui::Separator ( );
+		ImGui::ColorEdit3 ( "Default color" , ( float* ) &mainScene->defaultFragmentColor );
+		ImGui::ColorEdit3 ( "Simple Line color" , ( float* ) &mainScene->originShapeFragmentColor );
+		ImGui::ColorEdit3 ( "Catmull/Loops color" , ( float* ) &mainScene->catmullFragmentColor );
 		ImGui::Separator ( );
 		if ( ImGui::Button ( "Reset" ) ) reset ^= 1;
 		ImGui::ColorEdit3 ( "Clear color" , ( float* ) &clear_color );
@@ -201,30 +201,26 @@ int main ( int , char** )
 
 		if ( addCornerCutLine )
 		{
-			res = SimpleCornerCutting::sCutting(s, iters);
+			res = SimpleCornerCutting::sCutting ( s , iters );
 
-			glm::vec3 pos = glm::vec3(newVoxelPosition[0], newVoxelPosition[1], newVoxelPosition[2]);
-			mainScene->AddPointVertices(*res, pos);
+			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
+			mainScene->AddPointVertices ( *res , pos );
+			mainScene->AddPointOriginShapeVertices ( *s , pos );
 
-			std::vector<glm::vec3> originPoints;
-			originPoints.push_back(A);
-			originPoints.push_back(B);
-			originPoints.push_back(C);
-			originPoints.push_back(D);
 
-			mainScene->AddOriginCornerCutPoints(originPoints);
+			//mainScene->AddOriginCornerCutPoints ( originPoints );
 			addCornerCutLine = false;
 		}
 
-		if (addCatmull)
+		if ( addCatmull )
 		{
-			mainScene->AddCatMullShape();
+			mainScene->AddCatMullShape ( );
 			addCatmull = false;
 		}
 
-		if (addLoop)
+		if ( addLoop )
 		{
-			mainScene->AddLoopShape();
+			mainScene->AddLoopShape ( );
 			addLoop = false;
 		}
 
