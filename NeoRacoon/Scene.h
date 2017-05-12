@@ -108,6 +108,7 @@ public:
 
 	void AddCatMullShape();
 	void AddLoopShape();
+	void AddKobeltShape();
 	//Render Passes
 	void GeometryPass(); 
 

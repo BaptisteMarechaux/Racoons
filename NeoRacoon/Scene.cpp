@@ -234,6 +234,14 @@ void Scene::AddLoopShape()
 	UpdateBuffers();
 }
 
+void Scene::AddKobbeltShape()
+{
+	RenderableMesh mesh = testLoops();
+	catmullVertices = mesh.toVec3();
+
+	UpdateBuffers();
+}
+
 
 
 void Scene::GeometryPass()
