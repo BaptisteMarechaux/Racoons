@@ -13,6 +13,8 @@
 #include "Voxel.h"
 #include "Chunk.h"
 #include "Surface3D.h"
+#include "BenTest.h"
+#include "Kobbelt.h"
 
 enum CameraDirection {
 	forward,
@@ -27,35 +29,29 @@ private:
 	//Matrix
 	glm::mat4 model, proj, mvp, view;
 	//General Elements
-	GLfloat defaultFragmentColor[4] = { 0.6f, 0, 0.4f, 1 };
+	
 
 	//Buffers
 	GLuint vertexBufferPoints;
-	GLuint uvbuffer, normalbuffer, occlusioncolorbuffer;
+	GLuint normalbuffer;
 	//Other Buffers
-	GLuint singlePointsVertexBuffer;
-	GLuint lineVertexBuffer;
+	GLuint catmullVertexBuffer;
+	GLuint originShapeVertexBuffer;
 
-	std::vector<glm::vec3> normals, positions, vertices;
-	std::vector<float> occlusionColors;
+	std::vector<glm::vec3> normals, positions, vertices, originShapeVertices, catmullVertices;
 	std::vector<GLuint> indices;
-	//Other Arrays
-	std::vector<glm::vec3> pointVertices, lineVertices;
 
 	//Shader References
 	GLuint program, ssaoProgram;
 	GLuint position_location, color_location, mvp_location, light_location;
 	GLuint MatrixID, VertexArrayID, LightID, ModelMatrixID, ViewMatrixID, deltaTimeID;
 
-	//SSAO Locations
-	GLuint ssao_posTextureUnitLocation, ssao_sampleRadLocation, ssao_projMatrixLocation, ssao_kernelLocation;
+	
 
 	//VAO
 	GLuint voxelVertexArrayID;
-
-	GLuint pointsVertexArrayID;
-	GLuint linesVertexArrayID;
-
+	GLuint originShapeVertexArrayID;
+	GLuint catMullVertexArrayID;
 
 	float lastTime;
 	float currentTime;
@@ -68,8 +64,6 @@ private:
 	std::vector<glm::vec3> computedVertices, computedNormals;
 	std::vector<GLuint> computedIndices;
 
-	//Chunks
-	std::vector<Chunk> chunks;
 
 	//Camera management
 	glm::vec3 camPosition = glm::vec3(4, 3, 20);
@@ -91,12 +85,15 @@ public:
 	Scene();
 	~Scene();
 
+	GLfloat defaultFragmentColor[4] = { 0.6f, 0, 0.4f, 1 };
+	GLfloat originShapeFragmentColor[4] = { 1, 1, 1, 1 };
+
+	GLfloat catmullFragmentColor[4] = { 0.2f, 0.4f, 0.8f };
+
 	void Initialize();
 	void Render();
 	void UpdateBuffers();
-	void AddVoxelAtPosition(glm::vec3 pos);
-	void AddChunkAtPosition(glm::vec3 pos, int chunkSize);
-	void AddSpherizedChunkAtPosition(glm::vec3 pos, int chunkSize);
+	
 	glm::vec3 getCameraPosition();
 	void TranslateCamera(glm::vec3 v);
 	void TranslateCamera(CameraDirection direction);
@@ -108,16 +105,20 @@ public:
 
 	void AddLine();
 
-	void AddPoints();
+	void AddOriginCornerCutPoints(std::vector<glm::vec3>);
 
+	void AddCatMullShape(int iter);
+	void AddLoopShape(int iter);
+	void AddKobbeltShape(int iter);
 	//Render Passes
-	void GeometryPass();
+	void GeometryPass(); 
 
 	float RandomFloat(float a, float b);
 	void resetScene();
 	void Destroy();
 
 
-	void AddPointVertices(Surface3D surf);
+	void AddPointVertices ( Surface3D surf , glm::vec3 position ); 
+	void Scene::AddPointOriginShapeVertices ( Surface3D surf , glm::vec3 position );
 };
 

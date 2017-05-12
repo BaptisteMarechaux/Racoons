@@ -206,6 +206,8 @@
     <ClCompile Include="VTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shaders\basic.fs" />
+    <None Include="..\shaders\basic.vs" />
     <None Include="..\shaders\simple.fs" />
     <None Include="..\shaders\simple.vs" />
     <None Include="..\shaders\ssao.fs" />

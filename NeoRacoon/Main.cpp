@@ -33,6 +33,8 @@ int newChunkSize = 3;
 Scene *mainScene;
 double mouseX , mouseY;
 
+int iters = 2;
+
 static void error_callback ( int error , const char* description )
 {
 	fprintf ( stderr , "Error %d: %s\n" , error , description );
@@ -103,42 +105,40 @@ float frand_a_b ( float a , float b )
 
 int main ( int , char** )
 {
-	testLoops();
+	//testLoops ( );
 
 	bool show_test_window = true;
 	bool reset = false;
-	bool addAVoxel = false;
-	bool addChunk = false;
-	bool addSpherizedChunk = false;
 	bool show_another_window = false;
 	bool addCornerCutLine = false;
-	ImVec4 clear_color = ImColor ( 114 , 144 , 154 );
+	bool addCatmull = false;
+	bool addLoop = false;
+	bool addKobbelt = false;
+	ImVec4 clear_color = ImColor ( 12 , 14 , 17 );
 
 	Initialize ( );
 
 	//Points
-	glm::vec3 A = glm::vec3 ( 1 , 2 , 0 );
-	glm::vec3 B = glm::vec3 ( 1 , 6 , 0 );
-	glm::vec3 C = glm::vec3 ( 9 , 7 , 0 );
-	glm::vec3 D = glm::vec3 ( 10 , 3 , 0 );
+	glm::vec3 A = glm::vec3 ( 3 , -0 , 0 );
+	glm::vec3 B = glm::vec3 ( 0.5f , -3 , 0 );
+	glm::vec3 C = glm::vec3 ( 0 , 0 , 0 );
+	glm::vec3 D = glm::vec3 ( -5 , 4 , 0 );
+	glm::vec3 E = glm::vec3 ( 1 , 3 , 0 );
 	//Edges
 	Edge3D * AB = new Edge3D ( A , B );
 	Edge3D * BC = new Edge3D ( B , C );
 	Edge3D * CD = new Edge3D ( C , D );
-	Edge3D * DA = new Edge3D ( D , A );
+	Edge3D * DE = new Edge3D ( D , E );
+	//Edge3D * EA = new Edge3D ( E , A );
 	std::vector<Edge3D*> edges;
 	edges.push_back ( AB );
 	edges.push_back ( BC );
 	edges.push_back ( CD );
-	edges.push_back ( DA );
+	edges.push_back ( DE );
+	//edges.push_back ( EA );
 
 	//Surface
-	Surface3D * s = new Surface3D ( edges , true );
-
-	Surface3D * res = SimpleCornerCutting::sCutting ( s );
-		
-
-	int i = 0;
+	Surface3D * s = new Surface3D ( edges , false );
 
 	// Main loop
 	while ( !glfwWindowShouldClose ( window ) )
@@ -156,10 +156,18 @@ int main ( int , char** )
 
 		ImGui::Columns ( 1 );
 		ImGui::Separator ( );
+		ImGui::InputInt ( "Iterations" , &iters );
+		ImGui::Separator ( );
 		ImGui::Text ( "Add Things" );
 		ImGui::DragFloat3 ( "Position" , ( float* ) &newVoxelPosition );
-		if (ImGui::Button("Add  Corner Cut Line")) addCornerCutLine ^= 1;
-
+		if ( ImGui::Button ( "Add  Corner Cut Line" ) ) addCornerCutLine ^= 1;
+		if ( ImGui::Button ( "Add  Catmull Shape" ) ) addCatmull ^= 1;
+		if ( ImGui::Button ( "Add  Loop Shape" ) ) addLoop ^= 1;
+		if (ImGui::Button("Add  Kobbelt Shape")) addKobbelt ^= 1;
+		ImGui::Separator ( );
+		ImGui::ColorEdit3 ( "Default color" , ( float* ) &mainScene->defaultFragmentColor );
+		ImGui::ColorEdit3 ( "Simple Line color" , ( float* ) &mainScene->originShapeFragmentColor );
+		ImGui::ColorEdit3 ( "Catmull/Loops color" , ( float* ) &mainScene->catmullFragmentColor );
 		ImGui::Separator ( );
 		if ( ImGui::Button ( "Reset" ) ) reset ^= 1;
 		ImGui::ColorEdit3 ( "Clear color" , ( float* ) &clear_color );
@@ -186,32 +194,35 @@ int main ( int , char** )
 			ImGui::ShowTestWindow ( &show_test_window );
 		}
 
-		if ( addAVoxel )
+		if ( addCornerCutLine )
 		{
-			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
-			mainScene->AddVoxelAtPosition ( pos );
-			addAVoxel = false;
-		}
+			Surface3D * res = SimpleCornerCutting::sCutting ( s , iters );
 
-		if ( addChunk )
-		{
 			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
-			mainScene->AddChunkAtPosition ( pos , newChunkSize );
-			addChunk = false;
-		}
+			mainScene->AddPointVertices ( *res , pos );
+			mainScene->AddPointOriginShapeVertices ( *s , pos );
 
-		if ( addSpherizedChunk )
-		{
-			glm::vec3 pos = glm::vec3 ( newVoxelPosition [ 0 ] , newVoxelPosition [ 1 ] , newVoxelPosition [ 2 ] );
-			mainScene->AddSpherizedChunkAtPosition ( pos , newChunkSize );
-			//mainScene->AddChunkAtPosition(pos);
-			addSpherizedChunk = false;
-		}
 
-		if (addCornerCutLine)
-		{
-			mainScene->AddPointVertices(*res);
+			//mainScene->AddOriginCornerCutPoints ( originPoints );
 			addCornerCutLine = false;
+		}
+
+		if ( addCatmull )
+		{
+			mainScene->AddCatMullShape ( iters);
+			addCatmull = false;
+		}
+
+		if ( addLoop )
+		{
+			mainScene->AddLoopShape ( iters );
+			addLoop = false;
+		}
+
+		if (addKobbelt)
+		{
+			mainScene->AddKobbeltShape(iters);
+			addKobbelt = false;
 		}
 
 		if ( reset )
@@ -221,7 +232,7 @@ int main ( int , char** )
 		}
 
 		// Rendering
-		
+
 		int display_w , display_h;
 		glfwGetFramebufferSize ( window , &display_w , &display_h );
 		glViewport ( 0 , 0 , display_w , display_h );

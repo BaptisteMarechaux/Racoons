@@ -110,10 +110,6 @@ void kobbelt_internal::Kobbelt_connect_face(const Mesh &mesh, KobbeltData &data,
 		f.vertices.push_back(v);
 		for (size_t j = 0; j < face_ids.size(); ++j)
 		{
-			if (face_ids[j] == 7)
-				__debugbreak();
-
-
 			if (data.used_face_points[face_ids[j]] == -1)
 			{
 				out.vertices.push_back(data.face_points[face_ids[j]]);

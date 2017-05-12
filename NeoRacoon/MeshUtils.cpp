@@ -172,3 +172,19 @@ Vertex Mesh::getBaryCenter() const
 }
 
 
+
+
+std::vector<glm::vec3> RenderableMesh::toVec3() const
+{
+
+	std::vector<glm::vec3> ret;
+	ret.reserve(vertices.size() / 3);
+
+	for (size_t j = 0; j < indices.size(); j++)
+	{
+		size_t i = indices[j] * 3;
+		ret.emplace_back(glm::vec3(vertices[i], vertices[i + 1], vertices[i + 2]));
+	}
+
+	return ret;
+}
