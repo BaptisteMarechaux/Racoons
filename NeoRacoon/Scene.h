@@ -117,6 +117,7 @@ public:
 	void Destroy();
 
 
-	void AddPointVertices(Surface3D surf, glm::vec3 position);
+	void AddPointVertices ( Surface3D surf , glm::vec3 position ); 
+	void Scene::AddPointOriginShapeVertices ( Surface3D surf , glm::vec3 position );
 };
 
