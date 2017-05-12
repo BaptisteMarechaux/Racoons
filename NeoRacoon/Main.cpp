@@ -105,7 +105,7 @@ float frand_a_b ( float a , float b )
 
 int main ( int , char** )
 {
-	testLoops();
+	testLoops ( );
 
 	bool show_test_window = true;
 	bool reset = false;
@@ -136,8 +136,9 @@ int main ( int , char** )
 	//Surface
 	Surface3D * s = new Surface3D ( edges , true );
 
-	Surface3D * res;
-	
+	Surface3D * res = SimpleCornerCutting::sCutting ( s , 5 );
+
+
 	int i = 0;
 
 	
@@ -195,7 +196,7 @@ int main ( int , char** )
 			ImGui::ShowTestWindow ( &show_test_window );
 		}
 
-		if (addCornerCutLine)
+		if ( addCornerCutLine )
 		{
 			res = SimpleCornerCutting::sCutting(s, iters);
 
@@ -231,7 +232,7 @@ int main ( int , char** )
 		}
 
 		// Rendering
-		
+
 		int display_w , display_h;
 		glfwGetFramebufferSize ( window , &display_w , &display_h );
 		glViewport ( 0 , 0 , display_w , display_h );

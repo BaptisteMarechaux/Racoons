@@ -290,16 +290,20 @@ void Scene::Destroy()
 	glDeleteVertexArrays(1, &VertexArrayID);
 }
 
-void Scene::AddPointVertices(Surface3D surf, glm::vec3 position)
+void Scene::AddPointVertices ( Surface3D surf , glm::vec3 position )
 {
-	for (int i = 0;i < surf.get_Edges().size();++i)
+	for ( int i = 0; i < surf.get_Edges ( ).size ( ); ++i )
 	{
-		vertices.push_back(surf.get_Edges()[i]->get_A());
+		vertices.push_back ( surf.get_Edges ( ) [ i ]->get_A ( ) );
 	}
-	if (surf.get_Close())
+	if ( !surf.get_Close ( ) )
 	{
-		vertices.push_back(surf.get_Edges()[surf.get_Edges().size() - 1]->get_B());
+		vertices.push_back ( surf.get_Edges ( ) [ surf.get_Edges ( ).size ( ) - 1 ]->get_B ( ) );
+	}
+	else
+	{
+		vertices.push_back ( surf.get_Edges ( ) [ 0 ]->get_A ( ) );
 	}
 
-	UpdateBuffers();
+	UpdateBuffers ( );
 }
