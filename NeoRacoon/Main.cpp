@@ -33,6 +33,8 @@ int newChunkSize = 3;
 Scene *mainScene;
 double mouseX , mouseY;
 
+int iters = 2;
+
 static void error_callback ( int error , const char* description )
 {
 	fprintf ( stderr , "Error %d: %s\n" , error , description );
@@ -110,6 +112,7 @@ int main ( int , char** )
 	bool show_another_window = false;
 	bool addCornerCutLine = false;
 	bool addCatmull = false;
+	bool addLoop = false;
 	ImVec4 clear_color = ImColor ( 12 , 14 , 17 );
 
 	Initialize ( );
@@ -133,9 +136,11 @@ int main ( int , char** )
 	//Surface
 	Surface3D * s = new Surface3D ( edges , true );
 
-	Surface3D * res = SimpleCornerCutting::sCutting ( s );
+	Surface3D * res;
 	
 	int i = 0;
+
+	
 
 	// Main loop
 	while ( !glfwWindowShouldClose ( window ) )
@@ -152,12 +157,18 @@ int main ( int , char** )
 
 
 		ImGui::Columns ( 1 );
+		ImGui::Separator();
+		ImGui::InputInt("Iterations", &iters);
 		ImGui::Separator ( );
 		ImGui::Text ( "Add Things" );
 		ImGui::DragFloat3 ( "Position" , ( float* ) &newVoxelPosition );
 		if (ImGui::Button("Add  Corner Cut Line")) addCornerCutLine ^= 1;
 		if (ImGui::Button("Add  Catmull Shape")) addCatmull ^= 1;
-
+		if (ImGui::Button("Add  Loop Shape")) addLoop ^= 1;
+		ImGui::Separator();
+		ImGui::ColorEdit3("Default color", (float*)&mainScene->defaultFragmentColor);
+		ImGui::ColorEdit3("Simple Line color", (float*)&mainScene->originShapeFragmentColor);
+		ImGui::ColorEdit3("Catmull/Loops color", (float*)&mainScene->catmullFragmentColor);
 		ImGui::Separator ( );
 		if ( ImGui::Button ( "Reset" ) ) reset ^= 1;
 		ImGui::ColorEdit3 ( "Clear color" , ( float* ) &clear_color );
@@ -186,6 +197,8 @@ int main ( int , char** )
 
 		if (addCornerCutLine)
 		{
+			res = SimpleCornerCutting::sCutting(s, iters);
+
 			glm::vec3 pos = glm::vec3(newVoxelPosition[0], newVoxelPosition[1], newVoxelPosition[2]);
 			mainScene->AddPointVertices(*res, pos);
 
@@ -203,6 +216,12 @@ int main ( int , char** )
 		{
 			mainScene->AddCatMullShape();
 			addCatmull = false;
+		}
+
+		if (addLoop)
+		{
+			mainScene->AddLoopShape();
+			addLoop = false;
 		}
 
 		if ( reset )

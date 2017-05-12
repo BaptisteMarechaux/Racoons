@@ -226,6 +226,16 @@ void Scene::AddCatMullShape()
 	UpdateBuffers();
 }
 
+void Scene::AddLoopShape()
+{
+	RenderableMesh mesh = testLoops();
+	catmullVertices = mesh.toVec3();
+
+	UpdateBuffers();
+}
+
+
+
 void Scene::GeometryPass()
 {
 	glUseProgram(program);

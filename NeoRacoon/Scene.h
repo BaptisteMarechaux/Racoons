@@ -28,10 +28,7 @@ private:
 	//Matrix
 	glm::mat4 model, proj, mvp, view;
 	//General Elements
-	GLfloat defaultFragmentColor[4] = { 0.6f, 0, 0.4f, 1 };
-	GLfloat originShapeFragmentColor[4] = { 1, 1, 1, 1 };
-
-	GLfloat catmullFragmentColor[4] = { 0.2f, 0.4f, 0.8f };
+	
 
 	//Buffers
 	GLuint vertexBufferPoints;
@@ -87,6 +84,11 @@ public:
 	Scene();
 	~Scene();
 
+	GLfloat defaultFragmentColor[4] = { 0.6f, 0, 0.4f, 1 };
+	GLfloat originShapeFragmentColor[4] = { 1, 1, 1, 1 };
+
+	GLfloat catmullFragmentColor[4] = { 0.2f, 0.4f, 0.8f };
+
 	void Initialize();
 	void Render();
 	void UpdateBuffers();
@@ -105,7 +107,7 @@ public:
 	void AddOriginCornerCutPoints(std::vector<glm::vec3>);
 
 	void AddCatMullShape();
-
+	void AddLoopShape();
 	//Render Passes
 	void GeometryPass(); 
 
